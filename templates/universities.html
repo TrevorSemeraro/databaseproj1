@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Universities</h1>
+<ul>
+  {% for un in universities %}
+    <li><a href="{{ url_for('university', university_id=un.universityid) }}">{{ un.universityname }}</a>, {{ un.city or '' }} {{ un.state or '' }} · {{ un.students }} students · {{ un.clubs }} clubs</li>
+  {% endfor %}
+</ul>
+{% endblock %}

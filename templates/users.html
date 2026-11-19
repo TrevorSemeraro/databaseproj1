@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Users</h1>
+<h2>Log in as</h2>
+<form method="post" action="{{ url_for('login') }}">
+  <select name="userID">{% for u in users %}<option value="{{ u.userid }}">{{ u.username }}</option>{% endfor %}</select>
+  <button>Log in</button>
+</form>
+
+<h2>Register</h2>
+<form method="post" action="{{ url_for('register') }}">
+  <p><input name="name" placeholder="Name" maxlength="30" required></p>
+  <p><input name="username" placeholder="Username" maxlength="25" required></p>
+  <p><input name="major" placeholder="Major" maxlength="30"></p>
+  <p><input name="gradYear" type="number" min="1900" max="2100" placeholder="Graduation year"></p>
+  <p><select name="universityID" required>{% for un in universities %}<option value="{{ un.universityid }}">{{ un.universityname }}</option>{% endfor %}</select></p>
+  <button>Register</button>
+</form>
+
+<h2>All users</h2>
+<ul>
+  {% for u in users %}<li><a href="{{ url_for('user', user_id=u.userid) }}">{{ u.username }}</a> ({{ u.name }}), {{ u.universityname }}</li>{% endfor %}
+</ul>
+{% endblock %}

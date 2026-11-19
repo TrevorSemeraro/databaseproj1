@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Add a book</h1>
+<form method="post">
+  <p><input name="isbn" placeholder="ISBN" maxlength="13" required></p>
+  <p><input name="title" placeholder="Title" maxlength="200" required></p>
+  <p><input name="authors" placeholder="Authors, comma separated" required></p>
+  <p><input name="pubYear" type="number" placeholder="Publication year"></p>
+  <p><input name="genre" placeholder="Genre" maxlength="30"></p>
+  <p><textarea name="description" placeholder="Description"></textarea></p>
+  <button>Add</button>
+</form>
+{% endblock %}

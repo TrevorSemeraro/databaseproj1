@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Book Clubs</title></head>
+<body>
+<nav>
+  <a href="{{ url_for('books') }}">Books</a> |
+  <a href="{{ url_for('clubs') }}">Clubs</a> |
+  <a href="{{ url_for('universities') }}">Universities</a> |
+  <a href="{{ url_for('users') }}">Users</a> |
+  {% if g.user %}
+    <a href="{{ url_for('user', user_id=g.user.userid) }}">{{ g.user.username }}</a>
+    <form method="post" action="{{ url_for('logout') }}"><button>Log out</button></form>
+  {% else %}
+    <a href="{{ url_for('users') }}">Log in / Register</a>
+  {% endif %}
+</nav>
+<hr>
+{% block body %}{% endblock %}
+</body>
+</html>

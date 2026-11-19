@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Clubs</h1>
+<ul>
+  {% for c in clubs %}
+    <li><a href="{{ url_for('club', club_id=c.clubid) }}">{{ c.clubname }}</a> ({{ c.genre or 'any genre' }}) · {{ c.universityname }} · {{ c.members }} members · president {{ c.president }}</li>
+  {% else %}
+    <li>No clubs yet.</li>
+  {% endfor %}
+</ul>
+
+{% if g.user %}
+<h2>Start a club</h2>
+<form method="post" action="{{ url_for('create_club') }}">
+  <p><input name="clubName" placeholder="Club name" maxlength="100" required></p>
+  <p><input name="genre" placeholder="Genre" maxlength="30"></p>
+  <p><textarea name="description" placeholder="Description"></textarea></p>
+  <p><select name="universityID">{% for un in universities %}<option value="{{ un.universityid }}" {% if un.universityid == g.user.universityid %}selected{% endif %}>{{ un.universityname }}</option>{% endfor %}</select></p>
+  <button>Create</button>
+</form>
+{% endif %}
+{% endblock %}

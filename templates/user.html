@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ user.name }} (@{{ user.username }})</h1>
+<p><a href="{{ url_for('university', university_id=user.universityid) }}">{{ user.universityname }}</a> · {{ user.major or 'Undeclared' }} · Class of {{ user.gradyear or '?' }}</p>
+
+<h2>Reading list</h2>
+<ul>
+  {% for r in readings %}<li>{{ r.status }}: <a href="{{ url_for('book', isbn=r.isbn) }}">{{ r.title }}</a></li>{% else %}<li>Empty.</li>{% endfor %}
+</ul>
+
+<h2>Reviews</h2>
+<ul>
+  {% for r in reviews %}<li>{{ r.bookscore }}/5 <a href="{{ url_for('book', isbn=r.isbn) }}">{{ r.title }}</a> on {{ r.reviewdate }}: {{ r.description or '' }}</li>{% else %}<li>None.</li>{% endfor %}
+</ul>
+
+<h2>Clubs</h2>
+<ul>
+  {% for c in clubs %}<li><a href="{{ url_for('club', club_id=c.clubid) }}">{{ c.clubname }}</a>{% if c.is_president %} (president){% endif %}</li>{% else %}<li>None.</li>{% endfor %}
+</ul>
+{% endblock %}

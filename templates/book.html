@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ book.title }}</h1>
+<p>By
+  {% for a in authors %}<a href="{{ url_for('author', author_id=a.authorid) }}">{{ a.firstname or '' }} {{ a.lastname }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
+</p>
+<p>ISBN {{ book.isbn }} · {{ book.pubyear or 'Unknown year' }} · {{ book.genre or 'No genre' }}</p>
+<p>Average score: {{ book.avg_score or '—' }} ({{ book.review_count }} reviews)</p>
+<p>{{ book.description or '' }}</p>
+
+{% if g.user %}
+<h2>My reading list</h2>
+<form method="post" action="{{ url_for('track', isbn=book.isbn) }}">
+  {% for s in statuses %}
+    <label><input type="radio" name="status" value="{{ s }}" {% if tracking and tracking.status == s %}checked{% endif %}> {{ s }}</label>
+  {% endfor %}
+  {% if tracking %}<label><input type="radio" name="status" value="Remove"> Remove</label>{% endif %}
+  <button>Save</button>
+</form>
+
+<h2>Write a review</h2>
+<form method="post" action="{{ url_for('review', isbn=book.isbn) }}">
+  <select name="score">{% for s in scores %}<option>{{ s }}</option>{% endfor %}</select>
+  <p><textarea name="description" placeholder="Your review"></textarea></p>
+  <button>Post review</button>
+</form>
+{% endif %}
+
+<h2>Reviews</h2>
+<ul>
+  {% for r in reviews %}
+    <li>{{ r.bookscore }}/5 by <a href="{{ url_for('user', user_id=r.userid) }}">{{ r.username }}</a> on {{ r.reviewdate }}: {{ r.description or '' }}</li>
+  {% else %}
+    <li>No reviews yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

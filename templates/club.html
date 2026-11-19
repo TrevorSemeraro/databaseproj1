@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ club.clubname }}</h1>
+<p>{{ club.genre or 'Any genre' }} · <a href="{{ url_for('university', university_id=club.universityid) }}">{{ club.universityname }}</a> · President <a href="{{ url_for('user', user_id=club.presidentid) }}">{{ club.president }}</a></p>
+<p>{{ club.description or '' }}</p>
+
+{% if g.user and not is_member %}
+  <form method="post" action="{{ url_for('join_club', club_id=club.clubid) }}"><button>Join</button></form>
+{% elif is_member and not is_president %}
+  <form method="post" action="{{ url_for('leave_club', club_id=club.clubid) }}"><button>Leave</button></form>
+{% endif %}
+
+<h2>Books</h2>
+<ul>
+  {% for b in books %}
+    <li>{{ b.status }}: <a href="{{ url_for('book', isbn=b.isbn) }}">{{ b.title }}</a>
+      {% if is_president %}
+        <form method="post" action="{{ url_for('set_club_book', club_id=club.clubid) }}">
+          <input type="hidden" name="isbn" value="{{ b.isbn }}">
+          <select name="status">{% for s in statuses %}<option {% if s == b.status %}selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+          <button>Update</button>
+        </form>
+      {% endif %}
+    </li>
+  {% else %}
+    <li>None yet.</li>
+  {% endfor %}
+</ul>
+
+<h2>Recommended next reads</h2>
+<ol>
+  {% for r in recommendations %}
+    <li><a href="{{ url_for('book', isbn=r.isbn) }}">{{ r.title }}</a> ({{ r.genre or 'no genre' }}) · score {{ r.score }}
+      {% if is_president %}
+        <form method="post" action="{{ url_for('set_club_book', club_id=club.clubid) }}">
+          <input type="hidden" name="isbn" value="{{ r.isbn }}">
+          <select name="status">{% for s in statuses %}<option>{{ s }}</option>{% endfor %}</select>
+          <button>Choose</button>
+        </form>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ol>
+
+<h2>Members</h2>
+<ul>
+  {% for m in members %}<li><a href="{{ url_for('user', user_id=m.userid) }}">{{ m.username }}</a></li>{% endfor %}
+</ul>
+{% endblock %}
