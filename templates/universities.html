@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 {% block body %}
 <h1>Universities</h1>
+<form>
+  <input name="name" placeholder="University name" value="{{ args.name }}">
+  <button>Search</button>
+</form>
 <ul>
   {% for un in universities %}
     <li><a href="{{ url_for('university', university_id=un.universityid) }}">{{ un.universityname }}</a>, {{ un.city or '' }} {{ un.state or '' }} · {{ un.students }} students · {{ un.clubs }} clubs</li>
+  {% else %}
+  <li> No universities found. </li>
   {% endfor %}
 </ul>
 {% endblock %}

@@ -371,18 +371,22 @@ def user(user_id):
 
 @app.route("/universities")
 def universities():
+    name = request.args.get("name", "").strip()
+    results = rows(
+        """
+        SELECT un.*,
+                (SELECT COUNT(*) FROM Users u WHERE u.universityID = un.universityID) AS students,
+                (SELECT COUNT(*) FROM Clubs c WHERE c.universityID = un.universityID) AS clubs
+        FROM Universities AS un
+        WHERE un.universityName ILIKE :name 
+        ORDER BY un.universityName
+        """, 
+        name = f"%{name}%", 
+    )
     return render_template(
         "universities.html",
-        universities=rows(
-            """
-            SELECT un.*,
-                   (SELECT COUNT(*) FROM Users u WHERE u.universityID = un.universityID) AS students,
-                   (SELECT COUNT(*) FROM Clubs c WHERE c.universityID = un.universityID) AS clubs
-            FROM Universities un ORDER BY un.universityName
-            """
-        ),
-    )
-
+        universities = results, 
+        args = request.args)
 
 @app.route("/universities/<university_id>")
 def university(university_id):
