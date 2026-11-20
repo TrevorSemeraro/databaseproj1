@@ -22,4 +22,5 @@ Elizabeth Korzilius, Trevor Semeraro
 
 ## AI usage
 
-TODO
+Elizabeth: 
+I used ChatGPT to help keep track of how we implemented the features from our Part 1 Proposal. I also used it to help me debug code and figure out which terminal commands to run when I got stuck (starting the server, pushing changes to Git, etc.).
