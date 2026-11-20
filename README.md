@@ -2,7 +2,7 @@
 
 Elizabeth Korzilius, Trevor Semeraro
 
-- PostgreSQL account: `TODO`
+- PostgreSQL account: `ejk2200`
 - Cloud Run URL: `TODO`
 
 ## Implemented from the Part 1 proposal
