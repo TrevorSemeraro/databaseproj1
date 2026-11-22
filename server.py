@@ -1,7 +1,7 @@
 import os
 from functools import lru_cache
 
-from flask import Flask, abort, g, redirect, render_template, request, session, url_for
+from flask import Flask, abort, g, jsonify, redirect, render_template, request, session, url_for
 from sqlalchemy import URL, create_engine, text
 from sqlalchemy.exc import DBAPIError
 
@@ -130,7 +130,7 @@ def found(record):
 @app.before_request
 def load_user():
     g.user = None
-    if "user_id" in session and request.endpoint != "static":
+    if "user_id" in session and request.endpoint not in {"static", "another", "database_check"}:
         g.user = row("SELECT * FROM Users WHERE userID = :id", id=session["user_id"])
 
 
@@ -146,6 +146,8 @@ def database_error(error):
     if "conn" in g:
         g.conn.rollback()
     app.logger.warning("Database operation failed (%s)", type(error).__name__)
+    if request.endpoint == "database_check":
+        return jsonify(database="unavailable"), 503
     message = str(error.orig).splitlines()[0] if error.orig else "Database unavailable."
     return render_template("error.html", message=message), 400
 
@@ -153,6 +155,31 @@ def database_error(error):
 @app.route("/")
 def index():
     return redirect(url_for("books"))
+
+
+@app.route("/another")
+def another():
+    return render_template("another.html")
+
+
+@app.route("/db-check")
+def database_check():
+    if not (os.environ.get("DB_USER") and os.environ.get("DB_PASSWORD")):
+        return jsonify(database="unavailable"), 503
+    conn = db()
+    value = conn.execute(text("SELECT :value"), {"value": 1}).scalar_one()
+    schema_accessible = conn.execute(text("""
+        SELECT current_schema() IS NOT NULL
+            AND has_schema_privilege(current_schema(), 'USAGE')
+    """)).scalar_one()
+    table_exists = conn.execute(text("SELECT to_regclass('test') IS NOT NULL")).scalar_one()
+    return jsonify(
+        database="ok",
+        select_1=value,
+        current_schema_accessible=bool(schema_accessible),
+        demo_table_exists=bool(table_exists),
+        revision=os.environ.get("K_REVISION", "local"),
+    )
 
 
 @app.route("/books")
