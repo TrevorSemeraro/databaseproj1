@@ -3,7 +3,7 @@
 Elizabeth Korzilius, Trevor Semeraro
 
 - PostgreSQL account: `ejk2200`
-- Cloud Run URL: `TODO`
+- Cloud Run URL: `https://project1-web-593371204533.us-east1.run.app/`
 
 ## Implemented from the Part 1 proposal
 
