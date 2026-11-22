@@ -26,4 +26,4 @@ Elizabeth:
 I used ChatGPT to help keep track of how we implemented the features from our Part 1 Proposal. I also used it to help me debug code and figure out which terminal commands to run when I got stuck (starting the server, pushing changes to Git, etc.).
 
 Trevor:
-I used claude to help setup the project structure and to understand how to work with Flask, and the sqlalchemy library. I used claude to create the html pages to display the information from the backend, and ocmmunciate with the backend.
+I used claude to help setup the project structure and to understand how to work with Flask, and the sqlalchemy library. I used claude to create the html pages to display the information from the backend, and ocmmunciate with the backend. Used claude to setup the backend routes and interactions with the database.
